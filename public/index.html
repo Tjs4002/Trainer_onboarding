@@ -35,7 +35,7 @@
           <label class="field">
             <span class="label">Your photo *</span>
             <span class="hint">A clear passport-style photo (JPG/PNG, max 5 MB).</span>
-            <input name="photo" type="file" accept="image/*" capture="user" required />
+            <input name="photo" type="file" accept="image/*" required />
             <img id="photoPreview" class="preview" alt="" hidden />
           </label>
         </section>
@@ -82,6 +82,10 @@
         <section class="card">
           <h2>Bank details <span class="opt">(for payments)</span></h2>
           <label class="field">
+            <span class="label">Bank name *</span>
+            <input name="bank_name" type="text" autocomplete="off" required placeholder="e.g. State Bank of India" />
+          </label>
+          <label class="field">
             <span class="label">Account number *</span>
             <input name="bank_account_number" type="text" inputmode="numeric" autocomplete="off" required placeholder="9 to 18 digits" />
           </label>
@@ -91,7 +95,7 @@
           </label>
           <label class="field">
             <span class="label">Passbook page / cancelled cheque *</span>
-            <span class="hint">Photo or PDF showing your account number and IFSC (max 5 MB).</span>
+            <span class="hint">A clear photo or PDF of your passbook's front page or a cancelled cheque (max 5 MB).</span>
             <input name="passbook" type="file" accept="image/*,application/pdf" required />
             <img id="passbookPreview" class="preview" alt="" hidden />
           </label>

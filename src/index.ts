@@ -18,6 +18,7 @@ const submissionSchema = z.object({
   postal_address: z.string().trim().min(1, 'Postal address is required').max(600),
   pincode: z.string().trim().regex(PINCODE, 'Pincode must be 6 digits'),
   has_laptop: z.enum(['yes', 'no']),
+  bank_name: z.string().trim().min(1, 'Bank name is required').max(160),
   instagram: z.string().trim().max(200).optional().default(''),
   facebook: z.string().trim().max(200).optional().default(''),
   twitter: z.string().trim().max(200).optional().default(''),
@@ -86,6 +87,7 @@ app.post('/api/submit', async (c) => {
     postal_address: form.get('postal_address'),
     pincode: form.get('pincode'),
     has_laptop: form.get('has_laptop'),
+    bank_name: form.get('bank_name'),
     instagram: form.get('instagram') ?? '',
     facebook: form.get('facebook') ?? '',
     twitter: form.get('twitter') ?? '',
@@ -152,10 +154,10 @@ app.post('/api/submit', async (c) => {
        id, region, name, postal_address, pincode,
        latitude, longitude, geo_accuracy_m, geo_captured_at,
        has_laptop, instagram, facebook, twitter,
-       bank_account_number, bank_ifsc,
+       bank_name, bank_account_number, bank_ifsc,
        photo_key, photo_type, photo_size,
        passbook_key, passbook_type, passbook_size
-     ) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)`,
+     ) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)`,
   )
     .bind(
       subId,
@@ -171,6 +173,7 @@ app.post('/api/submit', async (c) => {
       data.instagram || null,
       data.facebook || null,
       data.twitter || null,
+      data.bank_name,
       data.bank_account_number,
       data.bank_ifsc,
       photoKey,

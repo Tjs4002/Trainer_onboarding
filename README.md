@@ -10,7 +10,7 @@ submissions. Collected per person:
 - Live location (browser geolocation, captured at submit)
 - Has a laptop (yes / no)
 - Social handles (Instagram, Facebook, X) — optional
-- Bank details: account number, IFSC, and a passbook page / cancelled cheque (upload)
+- Bank details: bank name, account number, IFSC, and a passbook page / cancelled cheque (upload)
 
 It is a **separate project** from `maha-olympiad-ops`: its own Worker, D1
 database, R2 bucket and deploy. It shares no data with the ops app.

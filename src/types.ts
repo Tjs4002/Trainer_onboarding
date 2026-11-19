@@ -24,6 +24,7 @@ export interface SubmissionRow {
   instagram: string | null
   facebook: string | null
   twitter: string | null
+  bank_name: string
   bank_account_number: string
   bank_ifsc: string
   photo_key: string | null

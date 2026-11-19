@@ -54,7 +54,7 @@
         '<td>' + esc(s.postal_address) + '<br><code>' + esc(s.pincode) + '</code></td>' +
         '<td>' + (s.has_laptop ? 'Yes' : 'No') + '</td>' +
         '<td>' + socials(s) + '</td>' +
-        '<td><code>A/C ' + esc(s.bank_account_number) + '<br>' + esc(s.bank_ifsc) + '</code></td>' +
+        '<td><code>' + esc(s.bank_name || '') + '<br>A/C ' + esc(s.bank_account_number) + '<br>' + esc(s.bank_ifsc) + '</code></td>' +
         '<td>' + location(s) + '</td>' +
         '<td>' + [fileLink(s, 'photo', token), fileLink(s, 'passbook', token)].filter(Boolean).join('<br>') + '</td>'
       rows.appendChild(tr)
