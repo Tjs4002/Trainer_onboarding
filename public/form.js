@@ -148,13 +148,19 @@
     e.preventDefault()
     errorEl.hidden = true
 
-    var fd = new FormData(form)
-    if (geo.lat != null) {
-      fd.set('latitude', String(geo.lat))
-      fd.set('longitude', String(geo.lng))
-      fd.set('geo_accuracy_m', String(geo.acc))
-      fd.set('geo_captured_at', String(geo.at))
+    // Location is mandatory - do not submit without it.
+    if (geo.lat == null) {
+      showError('Please share your location before submitting. Tap "Allow location" at the top of the form.')
+      locCard.scrollIntoView({ behavior: 'smooth', block: 'center' })
+      requestLocation()
+      return
     }
+
+    var fd = new FormData(form)
+    fd.set('latitude', String(geo.lat))
+    fd.set('longitude', String(geo.lng))
+    fd.set('geo_accuracy_m', String(geo.acc))
+    fd.set('geo_captured_at', String(geo.at))
 
     submitBtn.disabled = true
     submitBtn.textContent = 'Submitting...'

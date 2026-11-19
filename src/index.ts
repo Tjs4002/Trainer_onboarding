@@ -35,6 +35,9 @@ const submissionSchema = z.object({
   longitude: z.coerce.number().min(-180).max(180).optional(),
   geo_accuracy_m: z.coerce.number().min(0).optional(),
   geo_captured_at: z.coerce.number().int().min(0).optional(),
+}).refine((d) => d.latitude != null && d.longitude != null, {
+  message: 'Please share your location before submitting',
+  path: ['latitude'],
 })
 
 const ALLOWED_PHOTO = new Set(['image/jpeg', 'image/png', 'image/webp', 'image/heic'])
