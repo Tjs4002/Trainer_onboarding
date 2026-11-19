@@ -4,10 +4,13 @@
 
   var tokenEl = document.getElementById('token')
   var loadBtn = document.getElementById('load')
+  var exportBtn = document.getElementById('export')
   var msg = document.getElementById('msg')
   var countEl = document.getElementById('count')
   var table = document.getElementById('table')
   var rows = document.getElementById('rows')
+
+  var currentToken = ''
 
   function esc(s) {
     return String(s == null ? '' : s).replace(/[&<>"]/g, function (ch) {
@@ -80,10 +83,12 @@
           countEl.hidden = true
           return
         }
+        currentToken = token
         render(r.body.submissions, token)
         countEl.textContent = r.body.submissions.length + ' submission(s)'
         countEl.hidden = false
         table.hidden = false
+        exportBtn.hidden = r.body.submissions.length === 0
       })
       .catch(function () {
         loadBtn.disabled = false
@@ -93,6 +98,37 @@
       })
   }
 
+  function exportCsv() {
+    if (!currentToken) return
+    exportBtn.disabled = true
+    var original = exportBtn.textContent
+    exportBtn.textContent = 'Exporting...'
+    fetch('/api/admin/export.csv', { headers: { authorization: 'Bearer ' + currentToken } })
+      .then(function (res) {
+        if (!res.ok) throw new Error('export failed')
+        return res.blob()
+      })
+      .then(function (blob) {
+        var url = URL.createObjectURL(blob)
+        var a = document.createElement('a')
+        a.href = url
+        a.download = 'submissions-' + new Date().toISOString().slice(0, 10) + '.csv'
+        document.body.appendChild(a)
+        a.click()
+        document.body.removeChild(a)
+        setTimeout(function () { URL.revokeObjectURL(url) }, 2000)
+        exportBtn.disabled = false
+        exportBtn.textContent = original
+      })
+      .catch(function () {
+        exportBtn.disabled = false
+        exportBtn.textContent = original
+        msg.textContent = 'Export failed. Try reloading first.'
+        msg.hidden = false
+      })
+  }
+
   loadBtn.addEventListener('click', load)
+  exportBtn.addEventListener('click', exportCsv)
   tokenEl.addEventListener('keydown', function (e) { if (e.key === 'Enter') load() })
 })()

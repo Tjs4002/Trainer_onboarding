@@ -215,6 +215,80 @@ app.get('/api/admin/submissions', async (c) => {
   return c.json({ ok: true, submissions: results })
 })
 
+// Export all submissions as CSV (opens directly in Excel).
+app.get('/api/admin/export.csv', async (c) => {
+  if (!checkAdmin(c)) return c.text('Unauthorized', 401)
+
+  const { results } = await c.env.DB.prepare(
+    `SELECT * FROM submissions ORDER BY created_at DESC LIMIT 5000`,
+  ).all<SubmissionRow>()
+
+  const headers = [
+    'Submitted At',
+    'Name',
+    'Region',
+    'Postal Address',
+    'Pincode',
+    'Latitude',
+    'Longitude',
+    'Map Link',
+    'Has Laptop',
+    'Instagram',
+    'Facebook',
+    'Twitter',
+    'Bank Name',
+    'Account Number',
+    'IFSC',
+    'Photo File',
+    'Passbook File',
+  ]
+
+  const cell = (v: unknown): string => {
+    const s = v == null ? '' : String(v)
+    return /[",\n\r]/.test(s) ? '"' + s.replace(/"/g, '""') + '"' : s
+  }
+
+  const lines = [headers.join(',')]
+  for (const r of results) {
+    const map =
+      r.latitude != null ? `https://www.google.com/maps?q=${r.latitude},${r.longitude}` : ''
+    lines.push(
+      [
+        new Date(r.created_at * 1000).toISOString(),
+        r.name,
+        r.region,
+        r.postal_address,
+        r.pincode,
+        r.latitude ?? '',
+        r.longitude ?? '',
+        map,
+        r.has_laptop ? 'Yes' : 'No',
+        r.instagram ?? '',
+        r.facebook ?? '',
+        r.twitter ?? '',
+        r.bank_name ?? '',
+        r.bank_account_number,
+        r.bank_ifsc,
+        r.photo_key ?? '',
+        r.passbook_key ?? '',
+      ]
+        .map(cell)
+        .join(','),
+    )
+  }
+
+  // Leading BOM so Excel reads UTF-8 (keeps Devanagari names correct); CRLF rows.
+  const csv = '﻿' + lines.join('\r\n')
+  const stamp = new Date().toISOString().slice(0, 10)
+  return new Response(csv, {
+    headers: {
+      'content-type': 'text/csv; charset=utf-8',
+      'content-disposition': `attachment; filename="submissions-${stamp}.csv"`,
+      'cache-control': 'private, no-store',
+    },
+  })
+})
+
 // Stream one uploaded file. kind = 'photo' | 'passbook'.
 app.get('/api/admin/file/:id/:kind', async (c) => {
   if (!checkAdmin(c)) return c.text('Unauthorized', 401)
