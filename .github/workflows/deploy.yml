@@ -1,0 +1,33 @@
+name: Deploy to Cloudflare Workers
+
+# Deploys on every push to main. Requires a repository secret:
+#   CLOUDFLARE_API_TOKEN  - a Cloudflare API token with the "Edit Cloudflare
+#                           Workers" template permissions (Workers Scripts:Edit,
+#                           D1:Edit, Workers R2 Storage:Edit, Account Settings:Read).
+# Create the token at: https://dash.cloudflare.com/profile/api-tokens
+# Add it at: repo -> Settings -> Secrets and variables -> Actions -> New secret.
+#
+# Note: this deploys the Worker code. The D1 database, the R2 bucket, and the
+# ADMIN_TOKEN secret must already exist on the account (see README).
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch: {}
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - run: npm ci
+
+      - name: Deploy
+        uses: cloudflare/wrangler-action@v3
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}

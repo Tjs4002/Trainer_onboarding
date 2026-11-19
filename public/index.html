@@ -1,0 +1,118 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <title>Trainer Onboarding</title>
+    <meta name="description" content="Trainer onboarding and details form" />
+    <link rel="stylesheet" href="/styles.css" />
+  </head>
+  <body>
+    <main class="screen">
+      <header class="head">
+        <h1>Trainer Onboarding</h1>
+        <p class="sub">Please fill in your details. Fields marked * are required.</p>
+      </header>
+
+      <div id="locBanner" class="banner" hidden></div>
+
+      <form id="form" novalidate>
+        <!-- Region -->
+        <section class="card">
+          <label class="field">
+            <span class="label">Region / District *</span>
+            <input name="region" type="text" autocomplete="off" required placeholder="e.g. Nashik" />
+          </label>
+
+          <label class="field">
+            <span class="label">Full name *</span>
+            <input name="name" type="text" autocomplete="name" required placeholder="As per your bank account" />
+          </label>
+        </section>
+
+        <!-- Photo -->
+        <section class="card">
+          <label class="field">
+            <span class="label">Your photo *</span>
+            <span class="hint">A clear passport-style photo (JPG/PNG, max 5 MB).</span>
+            <input name="photo" type="file" accept="image/*" capture="user" required />
+            <img id="photoPreview" class="preview" alt="" hidden />
+          </label>
+        </section>
+
+        <!-- Address -->
+        <section class="card">
+          <label class="field">
+            <span class="label">Postal address *</span>
+            <textarea name="postal_address" rows="3" required placeholder="House / street / area / city"></textarea>
+          </label>
+          <label class="field">
+            <span class="label">Pincode *</span>
+            <input name="pincode" type="text" inputmode="numeric" maxlength="6" required placeholder="6-digit PIN" />
+          </label>
+        </section>
+
+        <!-- Laptop -->
+        <section class="card">
+          <span class="label">Do you have a laptop? *</span>
+          <div class="choices">
+            <label class="choice"><input type="radio" name="has_laptop" value="yes" required /><span>Yes</span></label>
+            <label class="choice"><input type="radio" name="has_laptop" value="no" /><span>No</span></label>
+          </div>
+        </section>
+
+        <!-- Socials -->
+        <section class="card">
+          <h2>Social handles <span class="opt">(optional)</span></h2>
+          <label class="field">
+            <span class="label">Instagram</span>
+            <input name="instagram" type="text" autocomplete="off" placeholder="@handle or link" />
+          </label>
+          <label class="field">
+            <span class="label">Facebook</span>
+            <input name="facebook" type="text" autocomplete="off" placeholder="Profile name or link" />
+          </label>
+          <label class="field">
+            <span class="label">X (Twitter)</span>
+            <input name="twitter" type="text" autocomplete="off" placeholder="@handle or link" />
+          </label>
+        </section>
+
+        <!-- Bank -->
+        <section class="card">
+          <h2>Bank details <span class="opt">(for payments)</span></h2>
+          <label class="field">
+            <span class="label">Account number *</span>
+            <input name="bank_account_number" type="text" inputmode="numeric" autocomplete="off" required placeholder="9 to 18 digits" />
+          </label>
+          <label class="field">
+            <span class="label">IFSC code *</span>
+            <input name="bank_ifsc" type="text" autocomplete="off" required placeholder="e.g. HDFC0001234" style="text-transform:uppercase" />
+          </label>
+          <label class="field">
+            <span class="label">Passbook page / cancelled cheque *</span>
+            <span class="hint">Photo or PDF showing your account number and IFSC (max 5 MB).</span>
+            <input name="passbook" type="file" accept="image/*,application/pdf" required />
+            <img id="passbookPreview" class="preview" alt="" hidden />
+          </label>
+        </section>
+
+        <p id="error" class="error" hidden></p>
+
+        <button id="submit" type="submit" class="btn">Submit</button>
+        <p class="sub note">Your location is captured to confirm your region. We use these details only for the training programme.</p>
+      </form>
+    </main>
+
+    <div id="done" class="screen done" hidden>
+      <div class="card ok">
+        <div class="tick">&#10003;</div>
+        <h1>Thank you</h1>
+        <p>Your details have been submitted successfully.</p>
+        <p class="sub">Reference: <span id="refId"></span></p>
+      </div>
+    </div>
+
+    <script src="/form.js"></script>
+  </body>
+</html>

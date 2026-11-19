@@ -1,0 +1,4 @@
+# Local development only. Copy to .dev.vars (gitignored) and fill in.
+# The admin token protects /admin and the file-download endpoints. The public
+# form itself needs no token.
+ADMIN_TOKEN=choose-a-long-random-string

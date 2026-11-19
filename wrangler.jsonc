@@ -1,0 +1,50 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "trainer-onboarding",
+  "main": "src/index.ts",
+  "compatibility_date": "2026-07-17",
+  "compatibility_flags": ["nodejs_compat"],
+  "observability": { "enabled": true },
+
+  // The form page, its assets and the success/admin pages are static files in
+  // ./public. The Worker wins for the API and the admin data endpoints; every
+  // other path falls through to the static assets.
+  "assets": {
+    "directory": "./public",
+    "not_found_handling": "single-page-application",
+    "run_worker_first": ["/api/*"]
+  },
+
+  // Create with:  wrangler d1 create trainer-onboarding
+  // then paste the printed database_id here.
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "trainer-onboarding",
+      "database_id": "3d10acab-4fbd-42f2-a8d7-f933ef2c7e4c",
+      "migrations_dir": "migrations"
+    }
+  ],
+
+  // Create with:  wrangler r2 bucket create trainer-onboarding-uploads
+  "r2_buckets": [
+    {
+      "binding": "UPLOADS",
+      "bucket_name": "trainer-onboarding-uploads"
+    }
+  ],
+
+  "vars": {
+    "APP_NAME": "Trainer Onboarding",
+    // Largest photo / cheque image accepted, in bytes (5 MB).
+    "MAX_UPLOAD_BYTES": "5242880"
+    // ADMIN_TOKEN is a secret: `wrangler secret put ADMIN_TOKEN`
+  }
+
+  // Optional custom domain - uncomment and set your zone once the project is
+  // live. Until then the workers.dev URL printed by `wrangler deploy` works.
+  //
+  // "routes": [
+  //   { "pattern": "onboarding.example.com", "custom_domain": true }
+  // ]
+}

@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Submissions &middot; Admin</title>
+    <link rel="stylesheet" href="/styles.css" />
+    <style>
+      .screen { max-width: 68rem; }
+      .bar { display: flex; gap: 8px; margin: 0 0 14px; }
+      .bar input { flex: 1; }
+      .bar button { min-height: var(--tap); padding: 0 18px; }
+      table { width: 100%; border-collapse: collapse; font-size: .82rem; background: #fff; border-radius: var(--radius); overflow: hidden; }
+      th, td { text-align: left; padding: 8px 10px; border-bottom: 1px solid var(--line); vertical-align: top; }
+      th { background: #f0f2f5; font-size: .72rem; text-transform: uppercase; letter-spacing: .03em; color: var(--muted); }
+      tr:last-child td { border-bottom: 0; }
+      a.file { color: var(--green); font-weight: 600; text-decoration: none; }
+      .count { color: var(--muted); font-size: .85rem; margin: 0 0 10px; }
+      .wrap { overflow-x: auto; }
+      code { font-size: .78rem; }
+    </style>
+  </head>
+  <body>
+    <main class="screen">
+      <h1>Submissions</h1>
+      <p class="sub" style="margin:4px 0 14px">Admin view. Paste your access token to load.</p>
+
+      <div class="bar">
+        <input id="token" type="password" placeholder="Admin token" />
+        <button id="load" class="btn" style="width:auto">Load</button>
+      </div>
+
+      <p id="msg" class="error" hidden></p>
+      <p id="count" class="count" hidden></p>
+
+      <div class="wrap">
+        <table id="table" hidden>
+          <thead>
+            <tr>
+              <th>When</th><th>Name</th><th>Region</th><th>Address</th><th>Laptop</th>
+              <th>Socials</th><th>Bank</th><th>Location</th><th>Files</th>
+            </tr>
+          </thead>
+          <tbody id="rows"></tbody>
+        </table>
+      </div>
+    </main>
+    <script src="/admin.js"></script>
+  </body>
+</html>
