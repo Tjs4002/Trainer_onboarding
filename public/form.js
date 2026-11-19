@@ -47,24 +47,70 @@
         locBtn.disabled = false
       },
       function (err) {
-        var msg =
-          err && err.code === 1
-            ? 'Location permission was denied. You can still submit, or tap below to allow it.'
-            : 'Could not get your location. Tap below to try again.'
-        setLocState('error', msg)
         locCoords.hidden = true
-        locBtn.textContent = 'Load location'
-        locBtn.hidden = false
-        locBtn.disabled = false
+        if (err && err.code === 1) {
+          // Permission denied. A hard block cannot be re-prompted from JS, so
+          // check the permission state and guide the user to re-enable it.
+          guideWhenDenied()
+        } else {
+          setLocState('error', 'Could not get your location. Tap below to try again.')
+          locBtn.textContent = 'Load location'
+          locBtn.hidden = false
+          locBtn.disabled = false
+        }
       },
       { enableHighAccuracy: true, timeout: 15000, maximumAge: 60000 },
     )
+  }
+
+  // When permission is denied, figure out whether we can still re-prompt
+  // (state 'prompt') or the browser has hard-blocked it (state 'denied').
+  function guideWhenDenied() {
+    locBtn.hidden = false
+    locBtn.disabled = false
+    locBtn.textContent = 'Allow location'
+    if (navigator.permissions && navigator.permissions.query) {
+      navigator.permissions
+        .query({ name: 'geolocation' })
+        .then(function (status) {
+          if (status.state === 'denied') {
+            setLocState(
+              'error',
+              'Location is blocked for this site. Tap the lock or ⓘ icon near the address bar, set Location to Allow, then tap Allow location.',
+            )
+          } else {
+            setLocState('error', 'Location permission was denied. Tap Allow location to try again.')
+          }
+          // If the user flips it to Allow in browser settings, capture at once.
+          status.onchange = function () {
+            if (status.state === 'granted') requestLocation()
+          }
+        })
+        .catch(function () {
+          setLocState('error', 'Location permission was denied. Tap Allow location to try again.')
+        })
+    } else {
+      setLocState('error', 'Location permission was denied. Tap Allow location to try again.')
+    }
   }
 
   locBtn.addEventListener('click', function () {
     locBtn.disabled = true
     requestLocation()
   })
+
+  // Watch the permission so a later "Allow" (from the browser's own UI)
+  // triggers an automatic capture without the user tapping anything.
+  if (navigator.permissions && navigator.permissions.query) {
+    navigator.permissions
+      .query({ name: 'geolocation' })
+      .then(function (status) {
+        status.onchange = function () {
+          if (status.state === 'granted' && geo.lat == null) requestLocation()
+        }
+      })
+      .catch(function () {})
+  }
 
   // Capture as soon as the page opens.
   requestLocation()
