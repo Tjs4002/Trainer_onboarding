@@ -14,7 +14,15 @@
         <p class="sub">Please fill in your details. Fields marked * are required.</p>
       </header>
 
-      <div id="locBanner" class="banner" hidden></div>
+      <section class="card loc-card" id="locCard">
+        <span class="label">Your location</span>
+        <div class="loc-row">
+          <span class="loc-dot" id="locDot"></span>
+          <span class="loc-status" id="locStatus">Getting your location&hellip;</span>
+        </div>
+        <div class="loc-coords" id="locCoords" hidden></div>
+        <button type="button" id="locBtn" class="btn-secondary" hidden>Load location</button>
+      </section>
 
       <form id="form" novalidate>
         <!-- Region -->

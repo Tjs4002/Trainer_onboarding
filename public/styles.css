@@ -136,6 +136,39 @@ input[type="file"] {
   color: #7a5b00;
 }
 
+/* ---------------------------- location ---------------------------- */
+.loc-card { }
+.loc-row { display: flex; align-items: center; gap: 10px; margin-top: 2px; }
+.loc-dot {
+  width: 12px; height: 12px; border-radius: 50%;
+  background: var(--amber); flex: none;
+}
+.loc-card.is-loading .loc-dot { background: var(--amber); animation: pulse 1s ease-in-out infinite; }
+.loc-card.is-ok .loc-dot { background: var(--green); }
+.loc-card.is-error .loc-dot { background: var(--red); }
+@keyframes pulse { 0%,100% { opacity: 1; } 50% { opacity: .35; } }
+.loc-status { font-size: .9rem; }
+.loc-coords {
+  margin-top: 8px;
+  font-size: .82rem;
+  color: var(--muted);
+  font-variant-numeric: tabular-nums;
+}
+.btn-secondary {
+  margin-top: 12px;
+  width: 100%;
+  min-height: var(--tap);
+  font: inherit;
+  font-weight: 600;
+  color: var(--green);
+  background: #fff;
+  border: 1.5px solid var(--green);
+  border-radius: 10px;
+  cursor: pointer;
+}
+.btn-secondary:active { background: rgba(11,110,46,.06); }
+.btn-secondary:disabled { opacity: .6; cursor: default; }
+
 .done { text-align: center; padding-top: 40px; }
 .ok { padding: 28px 20px; }
 .tick {
