@@ -29,7 +29,11 @@
         <section class="card">
           <label class="field">
             <span class="label">Region / District *</span>
-            <input name="region" type="text" autocomplete="off" required placeholder="e.g. Nashik" />
+            <select name="region" required>
+              <option value="" disabled selected>Select your region</option>
+              <option value="Nashik">Nashik</option>
+              <option value="Wardha">Wardha</option>
+            </select>
           </label>
 
           <label class="field">

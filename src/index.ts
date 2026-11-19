@@ -13,7 +13,7 @@ const PINCODE = /^[1-9][0-9]{5}$/
 const ACCOUNT = /^[0-9]{9,18}$/
 
 const submissionSchema = z.object({
-  region: z.string().trim().min(1, 'Region is required').max(120),
+  region: z.enum(['Nashik', 'Wardha'], { errorMap: () => ({ message: 'Please choose a region' }) }),
   name: z.string().trim().min(1, 'Name is required').max(160),
   postal_address: z.string().trim().min(1, 'Postal address is required').max(600),
   pincode: z.string().trim().regex(PINCODE, 'Pincode must be 6 digits'),
